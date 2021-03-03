@@ -9,7 +9,7 @@ const recipeDataBase = {
 (() => {
     const recipeDataBaseObject = {
         dbAddress: 'https://database-d004.restdb.io',
-        apikey: process.env.API_KEY || 'f2f17bbf001df7554a770505f46bd38dcb489',
+        apikey: process.env.API_KEY,
         async fetch(method = 'GET', url = '', body, contentType = 'application/json') {
             url = url || '';
             const fetchParams = {

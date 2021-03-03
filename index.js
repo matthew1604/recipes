@@ -2,7 +2,7 @@ const app = require('express')();
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const recipeDatabase = require('./recipe_database');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 app.get('/', (_, res) => res.redirect(303, 'recipes.html'));
 
