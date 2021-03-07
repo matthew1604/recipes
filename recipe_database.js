@@ -1,62 +1,52 @@
 const fetch = require('node-fetch');
 
-const recipeDataBase = {
-    async get() { },
-    async save() { },
-    async delete() { },
+const dbAddress = 'https://database-d004.restdb.io';
+const apiKey = process.env.API_KEY;
+
+const dbFetch = async (method = 'GET', url = '', body, contentType = 'application/json') => {
+    url = url || '';
+    const fetchParams = {
+        method,
+        headers: {
+            'Cache-control': 'no-cache',
+            'x-apikey': apiKey,
+        },
+    }
+
+    if (body) {
+        if (contentType) fetchParams.headers["Content-Type"] = contentType;
+        fetchParams.body = body;
+    }
+
+    const res = await fetch(dbAddress + url, fetchParams);
+    return await res.json();
 };
 
-(() => {
-    const recipeDataBaseObject = {
-        dbAddress: 'https://database-d004.restdb.io',
-        apikey: process.env.API_KEY,
-        async fetch(method = 'GET', url = '', body, contentType = 'application/json') {
-            url = url || '';
-            const fetchParams = {
-                method,
-                headers: {
-                    'Cache-control': 'no-cache',
-                    'x-apikey': this.apikey,
-                },
-            }
+const recipeDataBase = {
+    async get(_id = null) {
+        return await dbFetch('GET', '/rest/recipes' + (_id ? `/${_id}` : ''));
+    },
+    async save(recipe) {
+        const { _id, name, image, compo } = recipe;
+        const creationDate = new Date();
 
-            if (body) {
-                if (contentType) fetchParams.headers["Content-Type"] = contentType;
-                fetchParams.body = body;
-            }
+        const method = _id ? 'PUT' : 'POST';
+        const url = _id ? `/rest/recipes/${_id}` : '/rest/recipes';
+        const { _id: returnId } = await dbFetch(method, url, JSON.stringify({
+            name,
+            image,
+            compo,
+            creationDate,
+        }));
 
-            const res = await fetch(this.dbAddress + url, fetchParams);
-            return await res.json();
-        },
-        async get(_id = null) {
-            return await this.fetch('GET', '/rest/recipes' + (_id ? `/${_id}` : ''));
-        },
-        async save(recipe) {
-            const { _id, name, image, compo } = recipe;
-            const creationDate = new Date();
+        return returnId;
+    },
+    async delete(_id) {
+        const { image } = await this.get(_id);
+        if (image) await dbFetch('DELETE', `/media/${image}`);
 
-            const method = _id ? 'PUT' : 'POST';
-            const url = _id ? `/rest/recipes/${_id}` : '/rest/recipes';
-            const { _id: returnId } = await this.fetch(method, url, JSON.stringify({
-                name,
-                image,
-                compo,
-                creationDate,
-            }));
-
-            return returnId;
-        },
-        async delete(_id) {
-            const { image } = await this.get(_id);
-            if (image) await this.fetch('DELETE', `/media/${image}`);
-
-            return await this.fetch('DELETE', `/rest/recipes/${_id}`);
-        },
-    };
-
-    recipeDataBase.get = recipeDataBaseObject.get.bind(recipeDataBaseObject);
-    recipeDataBase.save = recipeDataBaseObject.save.bind(recipeDataBaseObject);
-    recipeDataBase.delete = recipeDataBaseObject.delete.bind(recipeDataBaseObject);
-})();
+        return await dbFetch('DELETE', `/rest/recipes/${_id}`);
+    },
+};
 
 module.exports = recipeDataBase;
