@@ -5,7 +5,7 @@ const recipe = {
         return this.imageId;
     },
     set image(image) {
-        if (this.imageId.length > 0) deleteRecipeImage(this.imageId);
+        if (this.imageId.length > 0 && this.imageId !== image) deleteRecipeImage(this.imageId);
         this.imageId = image;
         DOMElements.previewImg.src = image ? `https://database-d004.restdb.io/media/${image}` : '';
     },
@@ -87,7 +87,10 @@ const addCompo = ({ title, ingredients, process } = {}) => {
     const compoContainer = document.getElementById('compo-container');
 
     const cloneTemplate = compoTemplate.content.cloneNode(true).firstElementChild;
-    cloneTemplate.querySelector('button.btn-close').addEventListener('click', () => cloneTemplate.remove());
+    cloneTemplate.querySelector('button.btn-close').addEventListener('click', () => {
+        cloneTemplate.remove();
+        saveRecipe();
+    });
 
     const addIngredientButton = cloneTemplate.querySelector('ul.list-group>li.list-group-item.active');
     const addIngredient = (ingredient = '') => {
@@ -134,6 +137,8 @@ const addCompo = ({ title, ingredients, process } = {}) => {
     if (ingredients) ingredients.forEach(addIngredient);
 
     compoContainer.append(cloneTemplate);
+    saveRecipe();
+
     return cloneTemplate;
 }
 
@@ -182,9 +187,9 @@ const DOMElements = {
         listeners: {
             input({ currentTarget }) {
                 const [file] = currentTarget.files;
+                recipe.image = '';
                 if (file) {
                     DOMElements.spinnerLoadingImg.show();
-                    recipe.image = '';
                     const maxFileSize = 1048576;
 
                     const img = new Image();
@@ -204,11 +209,11 @@ const DOMElements = {
                             const { ids: [imageId] } = await postRecipeImage(file.name, blob);
                             recipe.image = imageId;
                             DOMElements.spinnerLoadingImg.hide();
-
-                            saveRecipe();
                         }, file.type);
                     }
                 }
+
+                saveRecipe();
             },
         },
     },

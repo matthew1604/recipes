@@ -29,11 +29,11 @@ async function htmlContent() {
         html += `
             <div id="recipe-${_id}" class="col mb-3">
                 <div class="card" style="width: 18rem;">
-                    ${image && `<img src="https://database-d004.restdb.io/media/${image}" class="card-img-top" alt="${image}">`}
+                    ${image.length > 0 ? `<img src="https://database-d004.restdb.io/media/${image}" class="card-img-top" alt="${image}">` : ''}
                     <div class="card-body">
                         <h5 class="card-title">${name || '[Aucun nom]'}</h5>
                         <div class="card-text">
-                            ${compo.length > 0 ? `<ul>${compo.map(({ title }) => `<li class="fst-italic">${title}</li>`).join('')}</ul>` : ''}
+                            ${compo.length > 0 ? `<ul>${compo.map(({ title }) => title.length > 0 ? `<li class="fst-italic">${title}</li>` : '').join('')}</ul>` : ''}
                             <p>${creationDateFormatted}</p>
                         </div>
                         <a href="new_recipe.html?_id=${_id}" class="btn btn-primary">Ouvrir</a>
