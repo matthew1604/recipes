@@ -50,11 +50,18 @@ app.post('/delete-recipe', bodyParser.json(), async (req, res) => {
     res.send(deleteResponse);
 });
 
+app.post('/delete-image', bodyParser.json(), async (req, res) => {
+    const { body: { _id } } = req;
+    const deleteResponse = await recipeDatabase.deleteMedia(_id);
+    
+    res.send(deleteResponse);
+});
+
 app.get('/*', async (req, res) => {
-    const { params, query, url } = req;
-    console.log({ params, query, url });
+    // const { params, query, url } = req;
+    // console.log({ params, query, url });
 
     res.sendStatus(403);
 });
 
-app.listen(port, console.log.bind(null, `Listening on port ${port}`));
+app.listen(port);

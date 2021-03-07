@@ -5,7 +5,9 @@ const recipe = {
         return this.imageId;
     },
     set image(image) {
+        if (this.imageId.length > 0) deleteRecipeImage(this.imageId);
         this.imageId = image;
+        DOMElements.previewImg.src = image ? `https://database-d004.restdb.io/media/${image}` : '';
     },
     get name() {
         return document.querySelector('#formRecipe input[name=name]').value;
@@ -68,6 +70,16 @@ const postRecipeImage = async (name, blob) => {
             'x-apikey': '601154cd1346a1524ff12e9d',
         }
     }).then((res) => res.json());
+}
+
+const deleteRecipeImage = async (_id) => {
+    fetch('/delete-image', {
+        method: 'POST',
+        body: JSON.stringify({ _id }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
 }
 
 const addCompo = ({ title, ingredients, process } = {}) => {
@@ -171,6 +183,8 @@ const DOMElements = {
             input({ currentTarget }) {
                 const [file] = currentTarget.files;
                 if (file) {
+                    DOMElements.spinnerLoadingImg.show();
+                    recipe.image = '';
                     const maxFileSize = 1048576;
 
                     const img = new Image();
@@ -189,6 +203,7 @@ const DOMElements = {
                         canvas.toBlob(async (blob) => {
                             const { ids: [imageId] } = await postRecipeImage(file.name, blob);
                             recipe.image = imageId;
+                            DOMElements.spinnerLoadingImg.hide();
 
                             saveRecipe();
                         }, file.type);
@@ -196,6 +211,28 @@ const DOMElements = {
                 }
             },
         },
+    },
+    spinnerLoadingImg: {
+        target: document.getElementById('spinner-loading-img'),
+        show() {
+            this.target.classList.remove('d-none');
+        },
+        hide() {
+            this.target.classList.add('d-none');
+        },
+    },
+    previewImg: {
+        target: document.querySelector('#preview-img>img'),
+        container: document.getElementById('preview-img'),
+        set src(src) {
+            if (src.length > 0) {
+                this.target.src = src;
+                this.target.onload = () => this.container.classList.remove('d-none');
+            } else this.hide();
+        },
+        hide() {
+            this.container.classList.add('d-none');
+        }
     },
     btnAddCompo: {
         target: document.getElementById('btnAddCompo'),

@@ -43,10 +43,13 @@ const recipeDataBase = {
     },
     async delete(_id) {
         const { image } = await this.get(_id);
-        if (image) await dbFetch('DELETE', `/media/${image}`);
+        if (image) this.deleteMedia(image);
 
         return await dbFetch('DELETE', `/rest/recipes/${_id}`);
     },
+    async deleteMedia(_id) {
+        return await dbFetch('DELETE', `/media/${_id}`);
+    }
 };
 
 module.exports = recipeDataBase;
