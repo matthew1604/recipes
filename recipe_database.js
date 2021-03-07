@@ -1,9 +1,9 @@
 const fetch = require('node-fetch');
 
 const recipeDataBase = {
-    get() { },
-    save() { },
-    delete() { },
+    async get() { },
+    async save() { },
+    async delete() { },
 };
 
 (() => {
@@ -47,6 +47,9 @@ const recipeDataBase = {
             return returnId;
         },
         async delete(_id) {
+            const { image } = await this.get(_id);
+            if (image) await this.fetch('DELETE', `/media/${image}`);
+
             return await this.fetch('DELETE', `/rest/recipes/${_id}`);
         },
     };
