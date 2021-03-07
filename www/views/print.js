@@ -24,7 +24,7 @@ async function htmlContent({ _id }) {
                 </div>
                 ${recipe.compo.map(({ title, ingredients, process }) => (
                     `<div class="row">
-                        <div class="col-12 bg-primary fw-bolder">${title}</div>
+                        <div class="col-12 bg-teal-200 fw-bolder">${title}</div>
                         <div class="col-8">
                             ${ingredients.map((ingredient) => `<p class="m-0">${ingredient}</p>`).join('')}
                         </div>
