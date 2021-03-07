@@ -36,10 +36,13 @@ async function htmlContent() {
                             ${compo.length > 0 ? `<ul>${compo.map(({ title }) => title.length > 0 ? `<li class="fst-italic">${title}</li>` : '').join('')}</ul>` : ''}
                             <p>${creationDateFormatted}</p>
                         </div>
-                        <a href="new_recipe.html?_id=${_id}" class="btn btn-primary">Ouvrir</a>
+                        <a href="print.html?_id=${_id}" target="_blank" class="btn btn-primary">Imprimer</a>
                         <div class="btn-group dropup">
-                            <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
                             <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="new_recipe.html?_id=${_id}">Modifier</a>
+                                </li>
                                 <li>
                                     <a class="dropdown-item text-danger" href="javascript:deleteRecipe('${_id}');">Supprimer</a>
                                 </li>
