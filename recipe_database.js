@@ -32,12 +32,10 @@ const recipeDataBase = {
 
         const method = _id ? 'PUT' : 'POST';
         const url = _id ? `/rest/recipes/${_id}` : '/rest/recipes';
-        const { _id: returnId } = await dbFetch(method, url, JSON.stringify({
-            name,
-            image,
-            compo,
-            creationDate,
-        }));
+        const body = { name, image, compo };
+        if (_id) body[creationDate] = creationDate;
+
+        const { _id: returnId } = await dbFetch(method, url, JSON.stringify(body));
 
         return returnId;
     },
