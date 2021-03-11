@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     onClick: positiveOnClick,
                 } = { label: 'Confirmer' },
                 negative: {
-                    class: negativeClass = 'btn-secondary',
+                    class: negativeClass = 'btn-default',
                     label: negativeLabel = 'Annuler',
                     onClick: negativeOnClick,
                 } = { label: 'Annuler' },

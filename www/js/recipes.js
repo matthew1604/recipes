@@ -20,9 +20,6 @@ function deleteRecipe(_id) {
                 location.reload();
             },
         },
-        negative: {
-            class: 'btn-default',
-        },
     });
 
     confirmModal.show();

@@ -26,6 +26,7 @@ async function htmlContent({ _id }) {
         `;
     }
     
+    html += includeHTML('modals/confirm');
     html += includeHTML('layout/footer');
 
     return html;

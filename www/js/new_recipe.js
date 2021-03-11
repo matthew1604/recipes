@@ -88,8 +88,20 @@ const addCompo = ({ title, ingredients, process } = {}) => {
 
     const cloneTemplate = compoTemplate.content.cloneNode(true).firstElementChild;
     cloneTemplate.querySelector('button.btn-close').addEventListener('click', () => {
-        cloneTemplate.remove();
-        saveRecipe();
+        const title = cloneTemplate.querySelector('input.input-title').value;
+        modals.confirm.setContent({
+            message: `Voulez-vous vraiment supprimer ${title ? `la composition "${title}"` : 'cette composition'} ?`,
+            positive: {
+                class: 'btn-danger',
+                label: 'Oui',
+                onClick() {
+                    cloneTemplate.remove();
+                    saveRecipe();
+                }
+            }
+        });
+        
+        modals.confirm.show();
     });
 
     const addIngredientButton = cloneTemplate.querySelector('ul.list-group>li.list-group-item.active');
