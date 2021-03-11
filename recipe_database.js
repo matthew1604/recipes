@@ -28,12 +28,11 @@ const recipeDataBase = {
     },
     async save(recipe) {
         const { _id, name, image, compo } = recipe;
-        const creationDate = new Date();
 
         const method = _id ? 'PUT' : 'POST';
         const url = _id ? `/rest/recipes/${_id}` : '/rest/recipes';
         const body = { name, image, compo };
-        if (_id) body[creationDate] = creationDate;
+        if (!_id) body.creationDate = new Date();
 
         const { _id: returnId } = await dbFetch(method, url, JSON.stringify(body));
 
