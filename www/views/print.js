@@ -19,7 +19,7 @@ async function htmlContent({ _id }) {
                 <div class="row mb-2">
                     <div class="col text-center">
                         <h3 class="text-decoration-underline">${recipe.name}</h3>
-                        ${recipe.image ? `<img src="https://database-d004.restdb.io/media/${recipe.image}" class="img-fluid rounded" alt="${recipe.name}" style="max-height: 30vh;">` : ''}
+                        ${recipe.image.length > 0 ? `<img src="https://database-d004.restdb.io/media/${recipe.image}" class="img-fluid rounded" alt="${recipe.name}" style="max-height: 30vh;">` : ''}
                     </div>
                 </div>
                 ${recipe.compo.map(({ title, ingredients, process }) => (
