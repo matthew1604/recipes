@@ -149,7 +149,6 @@ const addCompo = ({ title, ingredients, process } = {}) => {
     if (ingredients) ingredients.forEach(addIngredient);
 
     compoContainer.append(cloneTemplate);
-    saveRecipe();
 
     return cloneTemplate;
 }
@@ -287,7 +286,7 @@ Object.keys(DOMElements).forEach((element) => {
 document.addEventListener('click', () => DOMElements.contextMenu.hide());
 
 // autosave
-document.addEventListener('keyup', (() => {
+document.addEventListener('keypress', (() => {
     let timeout;
 
     return () => {
